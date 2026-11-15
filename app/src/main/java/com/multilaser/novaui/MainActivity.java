@@ -94,7 +94,7 @@ public class MainActivity extends Activity {
   t.setOnClickListener(v->launch(a));t.setOnLongClickListener(v->{appMenu(a);return true;});return t;
  }
  private void appMenu(ResolveInfo a){String pkg=a.activityInfo.packageName;Set<String> f=fav();boolean yes=f.contains(pkg);String[] opts={yes?"Remover dos favoritos":"Adicionar aos favoritos","Informações do aplicativo","Abrir"};
-  new AlertDialog.Builder(this).setTitle(name(a)).setItems(opts,(d,w)->{if(w==0){if(yes)f.remove(pkg);else f.add(pkg);p.edit().putStringSet("favorites",f).apply();render();}else if(w==1)openSetting(Intent.ACTION_APPLICATION_DETAILS_SETTINGS,pkg);else launch(a);}).show();}
+  new AlertDialog.Builder(this).setTitle(name(a)).setItems(opts,(d,w)->{if(w==0){if(yes)f.remove(pkg);else f.add(pkg);p.edit().putStringSet("favorites",f).apply();render();}else if(w==1)openSetting(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,pkg);else launch(a);}).show();}
  private void launch(ResolveInfo a){try{Intent i=getPackageManager().getLaunchIntentForPackage(a.activityInfo.packageName);if(i!=null){i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);startActivity(i);}}catch(Exception e){Toast.makeText(this,"Não foi possível abrir o aplicativo.",0).show();}}
  private void openSetting(String action){try{startActivity(new Intent(action));}catch(Exception e){Toast.makeText(this,"Atalho indisponível.",0).show();}}
  private void openSetting(String action,String pkg){try{startActivity(new Intent(action,Uri.parse("package:"+pkg)));}catch(Exception ignored){}}
