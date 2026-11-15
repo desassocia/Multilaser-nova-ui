@@ -1,12 +1,12 @@
-name: Preview release
+name: Nova UI Release
 on:
   push:
-    tags:
-      - 'v*'
+    branches: [ main ]
+  workflow_dispatch:
 permissions:
   contents: write
 jobs:
-  preview:
+  release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -19,12 +19,14 @@ jobs:
           gradle-version: '8.9'
       - name: Build installable preview APK
         run: gradle --no-daemon assembleDebug
-      - name: Rename APK
-        run: cp app/build/outputs/apk/debug/*.apk "Multilaser-Nova-UI-${GITHUB_REF_NAME}-preview.apk"
+      - name: Prepare APK
+        run: cp app/build/outputs/apk/debug/*.apk Multilaser-Nova-UI-v1.1.0-preview.apk
       - name: Publish GitHub prerelease
         uses: softprops/action-gh-release@v2
         with:
-          name: "Multilaser Nova UI ${{ github.ref_name }}"
+          tag_name: v1.1.0-preview
+          name: Multilaser Nova UI 1.1.0 Preview
           prerelease: true
+          make_latest: false
           generate_release_notes: true
-          files: Multilaser-Nova-UI-${{ github.ref_name }}-preview.apk
+          files: Multilaser-Nova-UI-v1.1.0-preview.apk
